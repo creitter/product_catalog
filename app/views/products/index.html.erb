@@ -1,14 +1,17 @@
-<h1>Product Cataloge</h1>
+<h1>Product Catalog</h1>
+
+<div
+  <%= button_to 'Add New Product', new_product_path %>
+  <%= button_to 'Import New Products', products_import_path %>
+
+
+<%= will_paginate @products %>
 
 <table class="table table-hover">
   <thead>
     <tr>
       <th>Name</th>
-      <th>Description</th>
-      <th>Width</th>
-      <th>Length</th>
-      <th>Height</th>
-      <th>Weight</th>
+      <th>Added</th>
       <th>Value</th>
       <th class="last-column" colspan="2"></th>
     </tr>
@@ -17,22 +20,13 @@
   <tbody>
     <% @products.each do |product| %>
       <tr>
-        <td><%= link_to "#{product.name}", product %></td>
-        <td class="large-column"><%= product.description %></td>
-        <td><%= product.width %></td>
-        <td><%= product.length %></td>
-        <td><%= product.height %></td>
-        <td><%= product.weight %></td>
-        <td><%= product.value %></td>
+        <td><%= link_to "#{product.name}", product, class: "show-detail" %></td>
+        <td><%= product.created_at.strftime("%b %d, %Y") %></td>
+        <td><%= number_to_currency(product.value) %></td>
         <td class="small-column"><%= link_to 'Edit', edit_product_path(product) %></td>
         <td class="small-column last-column"><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= render 'import_products' %>
-<%= link_to 'New Product', new_product_path %>
 

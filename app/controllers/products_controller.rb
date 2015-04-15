@@ -2,11 +2,17 @@ require "csv"
 
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-
+  before_action :save_return_to, only: [:show, :edit, :update]
+  helper_method :sort_column, :sort_direction
+  
+  
   # GET /products
   # GET /products.json
   def index
-    @products = Product.all
+    page = params[:page]
+    page ||= 1
+    
+    @products = Product.paginate(page: page, per_page: 10).order('created_at DESC')
   end
 
   # GET /products/1
@@ -63,6 +69,9 @@ class ProductsController < ApplicationController
     end
   end
   
+  def import
+  end
+  
   def upload
     uploaded_file = params[:importing_products]
     
@@ -77,19 +86,11 @@ class ProductsController < ApplicationController
       file.write(uploaded_file.read)
     end
     
-    products = import_products(filename)
-    invalid_products = products.select {|item| item if !item[:error].empty? }
-    
-    @products = Product.all
+    @products = import_products(filename)
 
     respond_to do |format|
-      if invalid_products.empty?
-        format.html { redirect_to products_imported_url, notice: 'Products were uploaded.' }
-        format.json { render :imported_products, status: :ok, location: @product }
-      else
-        format.html { render :imported_products }
-        format.json { render json: @products, status: :unprocessable_entity }
-      end
+      format.html { render :import, notice: 'Products were uploaded.' }
+      format.json { render :import, status: :ok, location: @products }
     end
   end
 
@@ -104,6 +105,18 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:name, :description, :width, :length, :height, :weight, :value)
     end
     
+    
+    def save_return_to
+      # We don't have a return_to saved and the page was reloaded not redirected to
+      if session[:return_to].nil? && request.referer.nil?
+        session[:return_to] = products_path
+      elsif !request.referer.nil? # We do not have a reload, but a valid back url.
+        session[:return_to] = request.referer
+        # else we use the previously saved return_to url.
+      end
+      
+    end
+ 
     # Import the products from the filename
     # TODO: Add to external services file?
     def import_products(filename)
@@ -133,4 +146,13 @@ class ProductsController < ApplicationController
       products
   
     end
+    
+    def sort_column
+      Product.column_names.include?(params[:sort]) ? params[:sort] : "name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+    
   end
