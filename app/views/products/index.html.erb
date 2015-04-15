@@ -1,0 +1,38 @@
+<h1>Product Cataloge</h1>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Width</th>
+      <th>Length</th>
+      <th>Height</th>
+      <th>Weight</th>
+      <th>Value</th>
+      <th class="last-column" colspan="2"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @products.each do |product| %>
+      <tr>
+        <td><%= link_to "#{product.name}", product %></td>
+        <td class="large-column"><%= product.description %></td>
+        <td><%= product.width %></td>
+        <td><%= product.length %></td>
+        <td><%= product.height %></td>
+        <td><%= product.weight %></td>
+        <td><%= product.value %></td>
+        <td class="small-column"><%= link_to 'Edit', edit_product_path(product) %></td>
+        <td class="small-column last-column"><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= render 'import_products' %>
+<%= link_to 'New Product', new_product_path %>
+

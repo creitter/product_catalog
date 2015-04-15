@@ -1,0 +1,6 @@
+<h3> Import Products</h3>
+
+<%= form_tag({action: :upload}, multipart: true) do %>
+  <%= file_field_tag 'importing_products' %>
+  <%= submit_tag %>
+<% end %>
