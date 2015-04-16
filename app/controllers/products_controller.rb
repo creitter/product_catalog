@@ -2,7 +2,7 @@ require "csv"
 
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
-  before_action :save_return_to, only: [:show, :edit, :update]
+  before_action :save_return_to, only: [:show, :edit, :update, :import]
   helper_method :sort_column, :sort_direction
   
   
@@ -68,32 +68,47 @@ class ProductsController < ApplicationController
       format.json { head :no_content }
     end
   end
-  
+
   def import
+    
   end
   
-  def upload
+  def process_import
     uploaded_file = params[:importing_products]
+    valid_import = false
     
-    # TODO: Determine if the file is too large. If it is, break it into pieces to make it more processable.
-    # Use File.size?, File.seek (IO.seek) and loop through the file creating it based on the timestamp
-    # Until this is done, we'll assume file size is not an issue for copying the file.
+    if uploaded_file.present?
+      # TODO: Determine if the file is too large. If it is, break it into pieces to make it more processable.
+      # Use File.size?, File.seek (IO.seek) and loop through the file creating it based on the timestamp
+      # Until this is done, we'll assume file size is not an issue for copying the file.
     
-    # If the file size isn't an issue but the processing/importing is, we can handle that in the import products method
-    filename = Rails.root.join('public', 'uploads', uploaded_file.original_filename + Time.now.getutc.to_i.to_s)
-      
-    File.open(filename, 'wb') do |file|
-      file.write(uploaded_file.read)
+      # If the file size isn't an issue but the processing/importing is, we can handle that in the import products method
+      filename = Rails.root.join('public', 'uploads', uploaded_file.original_filename + Time.now.getutc.to_i.to_s)
+    
+      begin
+        File.open(filename, 'wb') do |file|
+          file.write(uploaded_file.read)
+        end
+      rescue Exception => e
+        error_message = e.message
+      end
+
+      @products = import_products(filename)
+      valid_import = true
+
+    else
+      error_message = "Please select a file to upload"
     end
     
-    @products = import_products(filename)
-
     respond_to do |format|
-      format.html { render :import, notice: 'Products were uploaded.' }
-      format.json { render :import, status: :ok, location: @products }
+      if valid_import
+        format.html { render :import}
+      else
+        format.html { render :import }
+      end
     end
   end
-
+  
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
@@ -104,7 +119,6 @@ class ProductsController < ApplicationController
     def product_params
       params.require(:product).permit(:name, :description, :width, :length, :height, :weight, :value)
     end
-    
     
     def save_return_to
       # We don't have a return_to saved and the page was reloaded not redirected to
@@ -133,10 +147,10 @@ class ProductsController < ApplicationController
           weight = row[4]
           length = row[5]
           width = row[6]
-
+          
+          # Validate they don't already exist before adding them.
           product = Product.create(name: name, description: description, value: value, height: height, width: width, length: length, weight: weight)
 
-          # Validate they don't already exist before adding them.
           products << {product: product, error: product.errors}
         end
       else

@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+
+  get '/products/import' => 'products#import'
+  post '/products/import'=> 'products#process_import'
   resources :products
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -10,17 +13,9 @@ Rails.application.routes.draw do
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
   
-  post 'products/upload' => 'products#upload'
   
-  get 'products/import' => 'products#import'
-  post 'products/import' => 'products#import'
-  
-
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
 
   # Example resource route with options:
   #   resources :products do

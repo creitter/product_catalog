@@ -1,9 +1,9 @@
 <h1>Product Catalog</h1>
 
-<div
-  <%= button_to 'Add New Product', new_product_path %>
-  <%= button_to 'Import New Products', products_import_path %>
-
+<div>
+  <%= link_to 'Add New Product', new_product_path, class: 'btn btn-default'%>
+  <%= link_to 'Import New Products', products_import_path, class: 'btn btn-default' %>
+</div>
 
 <%= will_paginate @products %>
 

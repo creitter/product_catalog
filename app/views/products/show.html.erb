@@ -1,39 +1,36 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Name:</strong>
-  <%= @product.name %>
-</p>
+<table class="table table-bordered" style="width: 300px;">
+  <tr>
+    <td><label>Name:</label></td>
+    <td><%= @product.name %></td>
+  </tr>
+  <tr>
+    <td><label>Description:</label></td>
+    <td><%= @product.description %></td>
+  </tr>
+  <tr>
+    <td><label>Width:</label></td>
+    <td><%= @product.width %></td>
+  </tr>
+  <tr>
+    <td><label>Length:</label></td>
+    <td><%= @product.length %></td>
+  </tr>
+  <tr>
+    <td><label>Height:</label></td>
+    <td><%= @product.height %></td>
+  </tr>
+  <tr>
+    <td><label>Weight:</label></td>
+    <td> <%= @product.weight %></td>
+  </tr>
+  <tr>
+    <td><label>Value:</label></td>
+    <td><%= @product.value %></td>
+  </tr>
+  
+</table>
 
-<p>
-  <strong>Description:</strong>
-  <%= @product.description %>
-</p>
-
-<p>
-  <strong>Width:</strong>
-  <%= @product.width %>
-</p>
-
-<p>
-  <strong>Length:</strong>
-  <%= @product.length %>
-</p>
-
-<p>
-  <strong>Height:</strong>
-  <%= @product.height %>
-</p>
-
-<p>
-  <strong>Weight:</strong>
-  <%= @product.weight %>
-</p>
-
-<p>
-  <strong>Value:</strong>
-  <%= @product.value %>
-</p>
-
-<%= link_to 'Edit', edit_product_path(@product) %> |
-<%= link_to 'Back', session[:return_to] %>
+<%= link_to 'Edit', edit_product_path(@product), class:'btn btn-primary'%>
+<%= link_to 'Back', products_path, class:'btn btn-default' %>

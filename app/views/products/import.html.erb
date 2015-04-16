@@ -1,11 +1,17 @@
 <h1>Import products</h1>
 
-<%= form_tag({action: :upload}, multipart: true) do %>
+<%= form_tag({action: :import}, multipart: true, class: 'form-inline') do %>
   <%= file_field_tag 'importing_products' %>
-  <%= submit_tag %>
+  <br>
+  <%= submit_tag 'Import', class:'btn btn-primary' %>
+  <%= link_to 'Back to Products Listing', products_path, class:'btn btn-default' %>
+  
 <% end %>
 
 <% if @products.present? %>
+  <br>
+  <strong style="color:red">Do NOT Refresh The Page.  Your Products will be re-added again</strong>
+  
   <table class="table">
     <thead>
       <tr>
@@ -44,7 +50,6 @@
           <td><%= product.weight %></td>
           <td><%= product.value %></td>
           <% if !product.id.nil? %>
-            <td><%= link_to 'Show', product %></td>
             <td><%= link_to 'Edit', edit_product_path(product) %></td>
             <td><%= link_to 'Destroy', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
           <% else %>
