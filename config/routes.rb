@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   get '/products/import' => 'products#import'
   post '/products/import'=> 'products#process_import'
-  resources :products
+  resources :products, :merchants
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

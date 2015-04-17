@@ -15,7 +15,9 @@
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </div>
+  <br>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Save Merchant", class:"btn btn-primary" %>
+    <%= link_to 'Back', merchants_path, class:"btn btn-default" %>
   </div>
 <% end %>
