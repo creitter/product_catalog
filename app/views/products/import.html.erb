@@ -30,7 +30,6 @@
       <% @products.each do |item| %>
         <% product = item[:product] 
           error = item[:error]
-          Rails.logger.info "\n\n error #{error.inspect} \n\n"
           
           error_messages = error.messages.collect {|key, value|
             if value.length > 1

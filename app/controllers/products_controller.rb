@@ -12,7 +12,6 @@ class ProductsController < ApplicationController
     page = params[:page]
     page ||= 1
     @merchant = load_merchant
-    Rails.logger.debug "\n\n merchant #{@merchant.inspect} \n\n"
     @products = Product.paginate(page: page, per_page: 10).order('created_at DESC').where(merchant: @merchant)
   end
 
@@ -92,6 +91,7 @@ class ProductsController < ApplicationController
         end
       rescue Exception => e
         error_message = e.message
+        Rails.logger.debug "\n\n error_message #{error_message.inspect} \n\n"
       end
 
       @products = import_products(filename)
@@ -155,7 +155,7 @@ class ProductsController < ApplicationController
           products << {product: product, error: product.errors}
         end
       else
-        products << {error: "There was a problem processing the file you uploaded."}
+        products << {error: {messages: [{file: "#{filename} does not exist. There was a problem processing the file you uploaded."}]}
       end
       
       products
