@@ -1,0 +1,6 @@
+<h1>Welcome <%= @merchant.name%> Merchant</h1>
+
+Would you like to:
+<%= link_to "View your product catalog", products_path, class:'btn btn-default'  %>
+
+<%= link_to "View Orders of your products", orders_path, class:'btn btn-default' %>

@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+
+<table class="table table-bordered" style="width:600px;">
+  <tr>
+    <td><label>Order No:</label></td>
+    <td><%= @order.id %></td>
+  </tr>
+  <tr>
+    <td><label>Name:</label></td>
+    <td><%= @order.name %></td>
+  </tr>
+  <tr>
+    <td><label>Street Address:</label></td>
+    <td><%= @order.street_address %></td>
+  </tr>
+  <tr>
+    <td><label>City:</label></td>
+    <td><%= @order.city %></td>
+  </tr>
+  <tr>
+    <td><label>State:</label></td>
+    <td><%= @order.state %></td>
+  </tr>
+  <tr>
+    <td><label>Zip Code:</label></td>
+    <td><%= @order.zipcode %></td>
+  </tr>
+  <tr>
+    <td><label>Product</label></td>
+    <td><%= @order.product.name %> - <%= @order.product.description %> - <%= number_to_currency @order.product.value %></td>
+  </tr>
+  <tr>
+    <td><label>Quantity</label></td>
+    <td><%= @order.quantity %></td>
+  </tr>
+
+</table>
+
+<%= link_to 'Edit', edit_order_path(@order), class:'btn btn-default'%> 
+<%= link_to 'Back', orders_path, class:'btn btn-default' %>

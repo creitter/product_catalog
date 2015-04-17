@@ -1,8 +1,12 @@
 <h1>Product Catalog</h1>
 
 <div>
-  <%= link_to 'Add New Product', new_product_path, class: 'btn btn-default'%>
-  <%= link_to 'Import New Products', products_import_path, class: 'btn btn-default' %>
+  <%= link_to 'Add New Product', new_product_path, class:'btn btn-default'%>
+  <%= link_to 'Import New Products', products_import_path, class:'btn btn-default' %>
+</div>
+
+<div class="pull-right welcome-btn">
+  <%= link_to 'Back to Welcome Page', welcome_index_path, class:'btn btn-default btn-sm' %>
 </div>
 
 <%= will_paginate @products %>

@@ -11,8 +11,9 @@ class ProductsController < ApplicationController
   def index
     page = params[:page]
     page ||= 1
-    
-    @products = Product.paginate(page: page, per_page: 10).order('created_at DESC')
+    @merchant = load_merchant
+    Rails.logger.debug "\n\n merchant #{@merchant.inspect} \n\n"
+    @products = Product.paginate(page: page, per_page: 10).order('created_at DESC').where(merchant: @merchant)
   end
 
   # GET /products/1
