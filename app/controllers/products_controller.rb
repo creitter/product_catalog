@@ -155,7 +155,7 @@ class ProductsController < ApplicationController
           products << {product: product, error: product.errors}
         end
       else
-        products << {error: {messages: [{file: "#{filename} does not exist. There was a problem processing the file you uploaded."}]}
+        products << {error: {messages: [{file: "#{filename} does not exist. There was a problem processing the file you uploaded."}]}}
       end
       
       products
