@@ -1,11 +1,12 @@
 <h1>Import products</h1>
 
+<p class="bg-danger"><%= @error_message %></p>
+
 <%= form_tag({action: :import}, multipart: true, class: 'form-inline') do %>
   <%= file_field_tag 'importing_products' %>
   <br>
   <%= submit_tag 'Import', class:'btn btn-primary' %>
-  <%= link_to 'Back to Products Listing', products_path, class:'btn btn-default' %>
-  
+  <%= link_to 'Back to Products Listing', products_path, class:'btn btn-default' %>  
 <% end %>
 
 <% if @products.present? %>
@@ -31,16 +32,17 @@
         <% product = item[:product] 
           error = item[:error]
           
-          error_messages = error.messages.collect {|key, value|
-            if value.length > 1
-              message = value.join(" and ")
-            else
-              message = value.join()
-            end
+          if error.messages.present?
+            error_messages = error.messages.collect {|key, value|
+              if value.length > 1
+                message = value.join(" and ")
+              else
+                message = value.join()
+              end
             
-            "<strong>#{key}</strong> #{message}"
-          }
-        %>
+              "<strong>#{key}</strong> #{message}"
+            }
+          end %>
         <tr class="<%= product.id.nil? ? 'danger' : 'success' %>">
           <td><%= product.name %></td>
           <td><%= product.description %></td>

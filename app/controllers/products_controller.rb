@@ -3,14 +3,13 @@ require "csv"
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
   before_action :save_return_to, only: [:show, :edit, :update, :import]
-  helper_method :sort_column, :sort_direction
-  
-  
+    
   # GET /products
   # GET /products.json
   def index
     page = params[:page]
     page ||= 1
+
     @merchant = load_merchant
     @products = Product.paginate(page: page, per_page: 10).order('created_at DESC').where(merchant: @merchant)
   end
@@ -33,6 +32,7 @@ class ProductsController < ApplicationController
   # POST /products.json
   def create
     @product = Product.new(product_params)
+    @product.merchant = load_merchant
 
     respond_to do |format|
       if @product.save
@@ -75,7 +75,6 @@ class ProductsController < ApplicationController
   
   def process_import
     uploaded_file = params[:importing_products]
-    valid_import = false
     
     if uploaded_file.present?
       # TODO: Determine if the file is too large. If it is, break it into pieces to make it more processable.
@@ -89,24 +88,20 @@ class ProductsController < ApplicationController
         File.open(filename, 'wb') do |file|
           file.write(uploaded_file.read)
         end
+
+        @products = import_products(filename)
+        
+        # TODO: To avoid the repost issue, either write this to a batch file and read from the batch file based on the batch id or write it to another csv file. For now we just save it for this one time page rendering.
+        
       rescue Exception => e
-        error_message = e.message
-        Rails.logger.debug "\n\n error_message #{error_message.inspect} \n\n"
+        @error_message = e.message
       end
-
-      @products = import_products(filename)
-      valid_import = true
-
     else
-      error_message = "Please select a file to upload"
+      @error_message = "Please select a file to upload"
     end
     
     respond_to do |format|
-      if valid_import
-        format.html { render :import}
-      else
-        format.html { render :import }
-      end
+      format.html { render :import}
     end
   end
   
@@ -129,14 +124,15 @@ class ProductsController < ApplicationController
         session[:return_to] = request.referer
         # else we use the previously saved return_to url.
       end
-      
     end
  
     # Import the products from the filename
-    # TODO: Add to external services file?
+    # TODO: Add to external services file so we can access it via a CLI if needed.
+    
     def import_products(filename)
       
       products = []
+      merchant = load_merchant
       
       if File.exists?(filename)
         
@@ -149,9 +145,8 @@ class ProductsController < ApplicationController
           length = row[5]
           width = row[6]
           
-          # Validate they don't already exist before adding them.
-          product = Product.create(name: name, description: description, value: value, height: height, width: width, length: length, weight: weight)
-
+          # TODO: If we had a product number, we could validate they don't already exist before adding them.          
+          product = Product.create(name: name, description: description, value: value, height: height, width: width, length: length, weight: weight, merchant: merchant)
           products << {product: product, error: product.errors}
         end
       else
@@ -159,15 +154,6 @@ class ProductsController < ApplicationController
       end
       
       products
-  
+      
     end
-    
-    def sort_column
-      Product.column_names.include?(params[:sort]) ? params[:sort] : "name"
-    end
-
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
-    end
-    
   end

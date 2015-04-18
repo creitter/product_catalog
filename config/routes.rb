@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :orders, :welcome
+  resources :welcome
 
   get '/products/import' => 'products#import'
   post '/products/import'=> 'products#process_import'
@@ -12,6 +12,11 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
+  resources :orders do
+    get :autocomplete_product_name, :on => :collection
+  end
+  
+  resources :orders
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
   
