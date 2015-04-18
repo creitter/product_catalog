@@ -26,6 +26,7 @@
         <td><%= order.state %></td>
         <td><%= order.zipcode %></td>
         <td><%= link_to 'Show', order %></td>
+        <td class="small-column last-column"><%= link_to 'Destroy', order, method: :delete, data: { confirm: 'Are you sure?' } %></td>        
       </tr>
     <% end %>
   </tbody>

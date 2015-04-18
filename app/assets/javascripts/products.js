@@ -7,6 +7,7 @@
     })
   };
   
+  // TODO: Allow for commas in the numbers (filter them out)
   
   //http://stackoverflow.com/questions/17600093/rails-javascript-not-loading-after-clicking-through-link-to-helper
   // Compatability for regular pages.
