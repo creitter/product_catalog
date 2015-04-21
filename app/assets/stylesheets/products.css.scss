@@ -10,3 +10,16 @@ table.mini-table th.mini-label {
   width: 100px;
 }
 
+#unselect_all {
+  display: none;
+}
+
+#notice {
+  width: 500px;
+  border: 1px solid greenyellow;
+  margin: 5px;
+}
+
+#notice div {
+  padding: 5px;
+}

@@ -9,11 +9,19 @@
   <%= link_to 'Back to Welcome Page', welcome_index_path, class:'btn btn-default btn-sm' %>
 </div>
 
+<div id="notice" class="text-success" style="display:none">
+  <div class="bg-success"><strong>Product Status:</strong></div>
+  <div id="notice-message"></div>
+</div>
+
 <%= will_paginate @products %>
 
-<table class="table table-hover">
+<table id="products" class="table table-hover">
   <thead>
     <tr>
+      <th>
+      <input type="checkbox" id="select_all">
+      </th>
       <th>Name</th>
       <th>Added</th>
       <th>Value</th>
@@ -23,7 +31,8 @@
 
   <tbody>
     <% @products.each do |product| %>
-      <tr>
+      <tr class="row-<%=product.id %>">
+        <td class="very-small-column"><%= check_box "selectable", product.id, data: {id:"#{product.id}"} %></td>
         <td><%= link_to "#{product.name}", product, class: "show-detail" %></td>
         <td><%= product.created_at.strftime("%b %d, %Y") %></td>
         <td><%= number_to_currency(product.value) %></td>
@@ -32,5 +41,7 @@
       </tr>
     <% end %>
   </tbody>
+  
 </table>
+<%= link_to 'Delete Selected', "", id:"delete-bulk", remote: true, class:'btn btn-default btn-sm' %>
 

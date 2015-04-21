@@ -1,6 +1,14 @@
 <h1>Import products</h1>
 
+
+<p>
+CSV file should be ordered in the following order for the columns:<br>
+name, description, value, height, weight, length, width
+</p>
+
 <p class="bg-danger"><%= @error_message %></p>
+
+
 
 <%= form_tag({action: :import}, multipart: true, class: 'form-inline') do %>
   <%= file_field_tag 'importing_products' %>
@@ -8,6 +16,7 @@
   <%= submit_tag 'Import', class:'btn btn-primary' %>
   <%= link_to 'Back to Products Listing', products_path, class:'btn btn-default' %>  
 <% end %>
+
 
 <% if @products.present? %>
   <br>

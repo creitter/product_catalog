@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   get '/products/import' => 'products#import'
   post '/products/import'=> 'products#process_import'
+  delete '/products/destroy_bulk' => 'products#destroy_bulk'
+  
   resources :products, :merchants
 
   # The priority is based upon order of creation: first created -> highest priority.

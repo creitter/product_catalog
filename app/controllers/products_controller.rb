@@ -12,6 +12,11 @@ class ProductsController < ApplicationController
 
     @merchant = load_merchant
     @products = Product.paginate(page: page, per_page: 10).order('created_at DESC').where(merchant: @merchant)
+    
+    # We might have an out of sync pagination request. If so, just refresh from the start
+    if @products.empty? && page != 1
+      @products = Product.paginate(page: 1, per_page: 10).order('created_at DESC').where(merchant: @merchant)
+    end
   end
 
   # GET /products/1
@@ -66,6 +71,35 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+  
+  def destroy_bulk
+    product_ids = params[:ids]
+    messages = []
+    
+    if product_ids.empty?
+      messages << "Please select at least one product to delete."
+    else
+      # Get Products
+      products_to_be_deleted = Product.where("id IN (?)", product_ids).to_a
+      if products_to_be_deleted.empty? 
+        messages << "These products have already been deleted."
+      else  
+        products_to_be_deleted.each{|product|
+          if product.destroy 
+            messages << "#{product.name} was deleted."
+          else
+            messages << "#{product.name} was not deleted. Error: #{product.errors}"
+          end
+        }
+      end
+    end
+    
+    # TODO: Handle case when some product ids were deleted and others were not because they were already removed.(front end error)
+    
+    if request.xhr?
+      render json: { message: messages}
     end
   end
 
