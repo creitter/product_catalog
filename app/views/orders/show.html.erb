@@ -28,7 +28,13 @@
   </tr>
   <tr>
     <td><label>Product</label></td>
-    <td><%= @order.product.name %> - <%= @order.product.description %> - <%= number_to_currency @order.product.value %></td>
+    <td>
+    <% if @order.product.present? %>
+      <%= @order.product.name %> - <%= @order.product.description %> - <%= number_to_currency @order.product.value %>
+    <% else %>
+      The Product has been removed from the catalog.
+    <% end %>
+    </td>
   </tr>
   <tr>
     <td><label>Quantity</label></td>
