@@ -6,6 +6,11 @@
       $(this.closest('div.form-group').children).removeClass("field_with_errors")
     });
     
+    // $('#order_product').bind('railsAutocomplete.select', function(event, data) {
+    //   /* Do something here */
+    //   alert(data.item.id);
+    // });
+    
     // $("#order_form").submit(function(event) {
 //       // Validate Address
 //
