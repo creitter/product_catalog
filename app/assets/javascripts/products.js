@@ -19,9 +19,8 @@
       $(":checkbox[id='select_all']").prop('checked', false);
     })
   };
-  //
-  // TODO: Allow for commas in the numbers (filter them out)
-
+  
+  
   //http://stackoverflow.com/questions/17600093/rails-javascript-not-loading-after-clicking-through-link-to-helper
   // Compatability for regular pages.
   $(document).ready(ready);
@@ -29,7 +28,9 @@
   // Rails 4.0 uses Turbolinks so we use on>page:load
   $(document).on('page:load', ready);
 
+  /* Make the call to delete one or more products based on the product id's passed in */
   function delete_bulk()  {
+    
     var to_be_deleted  = $(":checkbox[name*='selectable']:checked").map(function() { return $(this).data("id") }).get();
     
     var request = $.ajax({
@@ -45,7 +46,6 @@
       $('#notice #notice-message').html(result.message.join("<br>"));
       $('#notice').show();
 
-      
       //Remove the products from the list in a pretty/animated way.
       // rocking the old school native js way instead of using $.each
       for (i=0; i < to_be_deleted.length; i++) {
@@ -66,6 +66,13 @@
       $(":checkbox[id='select_all']").prop('checked', false);
     });
   }
+  
+  // TODO: Allow for commas in the numbers (filter them out)
+  function filter_out_commas(number) {
+    return number;
+  }
+
+  
 
 })(jQuery);
 
