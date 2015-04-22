@@ -34,7 +34,11 @@
   <div class="form-group field">
     <%= f.label :product %>
     <%= f.text_field :product_id, class:"hidden" %>
-    <%= f.autocomplete_field :product_name, autocomplete_product_name_orders_path, :id_element => '#order_product_id' %>
+    <% if @order.product.nil? %>
+      <%= f.autocomplete_field :product, autocomplete_product_name_orders_path, :id_element => '#order_product_id' %>
+    <% else %>
+      <%= f.autocomplete_field :product_name, autocomplete_product_name_orders_path, :id_element => '#order_product_id' %>
+    <% end %>
     Start by entering the name and a list will show up.
   </div>
   <div class="form-group field">
